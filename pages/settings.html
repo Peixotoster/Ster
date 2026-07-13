@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - STER</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .settings-container { max-width: 700px; margin: 0 auto; padding: 20px; }
+        .settings-header { margin-bottom: 30px; }
+        .settings-header h1 { font-size: 28px; margin: 0; }
+        .settings-section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; }
+        .settings-section h2 { font-size: 18px; margin-bottom: 16px; color: #333; }
+        .settings-section .subtitle { font-size: 14px; color: #888; margin-bottom: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #6c63ff; }
+        .form-group textarea { resize: vertical; min-height: 60px; font-family: inherit; }
+        .form-group .checkbox-wrapper { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .form-group .checkbox-wrapper input[type="checkbox"] { width: 20px; height: 20px; accent-color: #6c63ff; cursor: pointer; flex-shrink: 0; }
+        .form-group .checkbox-wrapper span { font-size: 14px; color: #555; }
+        .btn-save { width: 100%; padding: 12px; background: #6c63ff; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-save:hover { background: #5a52d5; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3); }
+        .btn-danger { width: 100%; padding: 12px; background: #f44336; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-danger:hover { background: #d32f2f; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3); }
+        .user-info { display: flex; align-items: center; gap: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px; margin-bottom: 16px; }
+        .user-avatar { width: 60px; height: 60px; border-radius: 50%; background: #6c63ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; flex-shrink: 0; }
+        .user-details { flex: 1; }
+        .user-details .name { font-weight: 600; font-size: 18px; }
+        .user-details .email { color: #888; font-size: 14px; }
+        .loading-spinner { text-align: center; padding: 40px; color: #888; }
+        .loading-spinner .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid #f0f0f0; border-top: 4px solid #6c63ff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .settings-section { padding: 16px; } }
+    </style>
+</head>
+<body class="dashboard-page">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand"><span class="logo">⭐ STER</span></div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard.html"><span>📊</span> Dashboard</a>
+            <a href="/tasks.html"><span>📋</span> Tarefas</a>
+            <a href="/habits.html"><span>🔥</span> Hábitos</a>
+            <a href="/finances.html"><span>💰</span> Finanças</a>
+            <a href="/workout.html"><span>💪</span> Treino</a>
+            <a href="/settings.html" class="active"><span>⚙️</span> Configurações</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button onclick="STER.Settings.logout()" class="btn btn-outline btn-small">🚪 Sair</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h1>⚙️ Configurações</h1>
+                <p style="color:#888;font-size:14px;">Gerencie seu perfil e preferências</p>
+            </div>
+
+            <!-- Loading -->
+            <div id="loadingIndicator" class="loading-spinner"><div class="spinner"></div><p style="margin-top:12px;">Carregando configurações...</p></div>
+
+            <div id="settingsContent" style="display:none;">
+                <!-- Perfil -->
+                <div class="settings-section">
+                    <h2>👤 Perfil</h2>
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-details">
+                            <div class="name" id="userName">Usuário</div>
+                            <div class="email" id="userEmail">email@exemplo.com</div>
+                        </div>
+                    </div>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label>Nome completo</label>
+                            <input type="text" id="profileName" placeholder="Seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea id="profileBio" placeholder="Conte um pouco sobre você..." rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Objetivo fitness</label>
+                            <select id="profileGoal">
+                                <option value="">Selecione...</option>
+                                <option value="hipertrofia">💪 Hipertrofia</option>
+                                <option value="emagrecimento">🔥 Emagrecimento</option>
+                                <option value="definicao">✨ Definição</option>
+                                <option value="saude">🧘 Saúde e bem-estar</option>
+                                <option value="performance">🏃 Performance</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-save">Salvar Perfil</button>
+                    </form>
+                </div>
+
+                <!-- Preferências -->
+                <div class="settings-section">
+                    <h2>🎨 Preferências</h2>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label>Tema</label>
+                            <select id="themeSelect">
+                                <option value="dark">🌙 Escuro</option>
+                                <option value="light">☀️ Claro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" id="notificationsToggle">
+                                <span>Receber notificações</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Horário do lembrete de treino</label>
+                            <input type="time" id="workoutReminder" value="07:00">
+                        </div>
+                        <button type="submit" class="btn-save">Salvar Preferências</button>
+                    </form>
+                </div>
+
+                <!-- Sair -->
+                <div class="settings-section">
+                    <h2>🚪 Sair da Conta</h2>
+                    <p style="color:#888;font-size:14px;margin-bottom:16px;">Você será desconectado do sistema.</p>
+                    <button onclick="STER.Settings.logout()" class="btn-danger">Sair</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof STER !== 'undefined' && STER.Settings) {
+                STER.Settings.init();
+            } else {
+                console.error('STER.Settings não encontrado');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanças - STER</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .finances-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .finances-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .finances-header h1 { font-size: 28px; margin: 0; }
+        .balance-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+        .balance-card { background: #fff; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; text-align: center; }
+        .balance-card .amount { font-size: 28px; font-weight: 700; }
+        .balance-card .amount.positive { color: #4caf50; }
+        .balance-card .amount.negative { color: #f44336; }
+        .balance-card .label { font-size: 12px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .finance-item { background: #fff; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; display: flex; align-items: center; gap: 16px; transition: all 0.3s; }
+        .finance-item:hover { border-color: #6c63ff; }
+        .finance-item .type-badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+        .finance-item .type-badge.income { background: #e8f5e9; color: #2e7d32; }
+        .finance-item .type-badge.expense { background: #fce4ec; color: #c62828; }
+        .finance-item .info { flex: 1; }
+        .finance-item .info .desc { font-weight: 500; }
+        .finance-item .info .category { font-size: 12px; color: #888; }
+        .finance-item .amount { font-weight: 600; font-size: 16px; flex-shrink: 0; }
+        .finance-item .amount.positive { color: #4caf50; }
+        .finance-item .amount.negative { color: #f44336; }
+        .finance-item .actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .finance-item .actions button { background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.3s; font-size: 16px; }
+        .finance-item .actions .delete-btn:hover { background: #fee; color: #c00; }
+        .add-finance-btn { width: 100%; padding: 14px; border: 2px dashed #ddd; border-radius: 12px; background: transparent; color: #666; font-weight: 500; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
+        .add-finance-btn:hover { border-color: #6c63ff; color: #6c63ff; background: rgba(108, 99, 255, 0.04); }
+        .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .filter-btn { padding: 6px 14px; border: 2px solid #e0e0e0; border-radius: 6px; background: #fff; cursor: pointer; font-weight: 500; font-size: 13px; transition: all 0.3s; }
+        .filter-btn:hover { border-color: #6c63ff; }
+        .filter-btn.active { background: #6c63ff; color: #fff; border-color: #6c63ff; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal.show { display: flex; }
+        .modal-content { background: #fff; border-radius: 16px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { font-size: 20px; margin: 0; }
+        .modal-close { font-size: 28px; cursor: pointer; color: #999; background: none; border: none; transition: color 0.3s; }
+        .modal-close:hover { color: #333; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #6c63ff; }
+        .btn-save { width: 100%; padding: 12px; background: #6c63ff; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-save:hover { background: #5a52d5; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3); }
+        .loading-spinner { text-align: center; padding: 40px; color: #888; }
+        .loading-spinner .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid #f0f0f0; border-top: 4px solid #6c63ff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .finance-item { flex-wrap: wrap; } .finance-item .actions { width: 100%; justify-content: flex-end; } }
+    </style>
+</head>
+<body class="dashboard-page">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand"><span class="logo">⭐ STER</span></div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard.html"><span>📊</span> Dashboard</a>
+            <a href="/tasks.html"><span>📋</span> Tarefas</a>
+            <a href="/habits.html"><span>🔥</span> Hábitos</a>
+            <a href="/finances.html" class="active"><span>💰</span> Finanças</a>
+            <a href="/workout.html"><span>💪</span> Treino</a>
+            <a href="/settings.html"><span>⚙️</span> Configurações</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button onclick="STER.Settings.logout()" class="btn btn-outline btn-small">🚪 Sair</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <div class="finances-container">
+            <div class="finances-header">
+                <div>
+                    <h1>💰 Finanças</h1>
+                    <p style="color:#888;font-size:14px;">Controle suas receitas e despesas</p>
+                </div>
+                <button onclick="STER.Finances.showAddModal()" class="btn btn-primary">➕ Nova Transação</button>
+            </div>
+
+            <!-- Balance Summary -->
+            <div class="balance-summary">
+                <div class="balance-card">
+                    <div class="amount positive" id="totalIncome">R$ 0,00</div>
+                    <div class="label">Total Receitas</div>
+                </div>
+                <div class="balance-card">
+                    <div class="amount negative" id="totalExpense">R$ 0,00</div>
+                    <div class="label">Total Despesas</div>
+                </div>
+                <div class="balance-card">
+                    <div class="amount" id="balance">R$ 0,00</div>
+                    <div class="label">Saldo</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="income">💰 Receitas</button>
+                <button class="filter-btn" data-filter="expense">💸 Despesas</button>
+            </div>
+
+            <!-- Loading -->
+            <div id="loadingIndicator" class="loading-spinner"><div class="spinner"></div><p style="margin-top:12px;">Carregando transações...</p></div>
+
+            <!-- Finance List -->
+            <div id="financeList" style="display:none;"></div>
+
+            <!-- Add Button -->
+            <button class="add-finance-btn" onclick="STER.Finances.showAddModal()" id="addFinanceBtn" style="display:none;">➕ Adicionar Transação</button>
+        </div>
+    </main>
+
+    <!-- MODAL -->
+    <div class="modal" id="financeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nova Transação</h2>
+                <button class="modal-close" onclick="STER.Finances.closeModal()">&times;</button>
+            </div>
+            <form id="financeForm">
+                <input type="hidden" id="editFinanceId">
+                <div class="form-group">
+                    <label>Descrição *</label>
+                    <input type="text" id="financeDesc" placeholder="Ex: Salário, Supermercado" required>
+                </div>
+                <div class="form-group">
+                    <label>Valor (R$) *</label>
+                    <input type="number" id="financeAmount" placeholder="0,00" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="financeType">
+                        <option value="expense">💸 Despesa</option>
+                        <option value="income">💰 Receita</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="financeCategory">
+                        <option value="alimentacao">🍽️ Alimentação</option>
+                        <option value="transporte">🚗 Transporte</option>
+                        <option value="moradia">🏠 Moradia</option>
+                        <option value="saude">🏥 Saúde</option>
+                        <option value="educacao">📚 Educação</option>
+                        <option value="lazer">🎮 Lazer</option>
+                        <option value="salario">💼 Salário</option>
+                        <option value="investimento">📈 Investimento</option>
+                        <option value="outros">📌 Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="date" id="financeDate">
+                </div>
+                <button type="submit" class="btn-save">Salvar Transação</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof STER !== 'undefined' && STER.Finances) {
+                STER.Finances.init();
+            } else {
+                console.error('STER.Finances não encontrado');
+            }
+        });
+    </script>
+</body>
+</html>
