@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas - STER</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body class="dashboard-page">
+    <!-- SIDEBAR (mesma do dashboard) -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span class="logo">⭐ STER</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard.html">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="/tasks.html" class="active">
+                <span>📋</span> Tarefas
+            </a>
+            <a href="/habits.html">
+                <span>🔥</span> Hábitos
+            </a>
+            <a href="/finances.html">
+                <span>💰</span> Finanças
+            </a>
+            <a href="/settings.html">
+                <span>⚙️</span> Configurações
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button onclick="LifeOS.logout()" class="btn btn-outline btn-small">🚪 Sair</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <header class="dashboard-header">
+            <div>
+                <h1>Minhas Tarefas</h1>
+                <p>Gerencie suas tarefas do dia a dia</p>
+            </div>
+            <div>
+                <button onclick="LifeOS.showAddTask()" class="btn btn-primary">
+                    ➕ Nova Tarefa
+                </button>
+            </div>
+        </header>
+
+        <!-- FILTERS -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="pending">Pendentes</button>
+            <button class="filter-btn" data-filter="done">Concluídas</button>
+            <button class="filter-btn" data-filter="high">Prioridade Alta</button>
+        </div>
+
+        <!-- TASK LIST -->
+        <section class="task-list" id="taskList">
+            <div class="task-item">
+                <div class="task-check">
+                    <input type="checkbox">
+                </div>
+                <div class="task-content">
+                    <span class="task-title">Exemplo de tarefa</span>
+                    <span class="task-category">📁 Trabalho</span>
+                </div>
+                <div class="task-actions">
+                    <span class="task-priority high">Alta</span>
+                    <button onclick="LifeOS.deleteTask(1)">🗑️</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL ADD TASK -->
+    <div id="taskModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Tarefa</h2>
+                <span onclick="LifeOS.closeModal('taskModal')" class="close">&times;</span>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="taskTitle" placeholder="Digite o título" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="taskCategory">
+                        <option value="pessoal">👤 Pessoal</option>
+                        <option value="trabalho">💼 Trabalho</option>
+                        <option value="estudo">📚 Estudo</option>
+                        <option value="saude">🏥 Saúde</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prioridade</label>
+                    <select id="taskPriority">
+                        <option value="baixa">🟢 Baixa</option>
+                        <option value="media">🟡 Média</option>
+                        <option value="alta">🔴 Alta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prazo</label>
+                    <input type="date" id="taskDeadline">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Salvar Tarefa</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            LifeOS.initTasks();
+        });
+    </script>
+</body>
+</html>

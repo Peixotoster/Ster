@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - STER</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body class="dashboard-page">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span class="logo">⭐ STER</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard.html" class="active">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="/tasks.html">
+                <span>📋</span> Tarefas
+            </a>
+            <a href="/habits.html">
+                <span>🔥</span> Hábitos
+            </a>
+            <a href="/finances.html">
+                <span>💰</span> Finanças
+            </a>
+            <a href="/settings.html">
+                <span>⚙️</span> Configurações
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button onclick="LifeOS.logout()" class="btn btn-outline btn-small">🚪 Sair</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <header class="dashboard-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p id="greeting">Olá, <span id="userName">Usuário</span>!</p>
+            </div>
+            <div>
+                <span id="currentDate"></span>
+            </div>
+        </header>
+
+        <!-- STATS -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-info">
+                    <span class="stat-label">Tarefas</span>
+                    <span class="stat-value" id="taskCount">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-info">
+                    <span class="stat-label">Hábitos</span>
+                    <span class="stat-value" id="habitCount">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-info">
+                    <span class="stat-label">Saldo</span>
+                    <span class="stat-value" id="balanceCount">R$ 0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-info">
+                    <span class="stat-label">Progresso</span>
+                    <span class="stat-value" id="progressCount">0%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RECENT ACTIVITY -->
+        <section class="recent-activity">
+            <h2>Atividades Recentes</h2>
+            <div id="activityList" class="activity-list">
+                <p style="color: #999;">Carregando atividades...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            LifeOS.initDashboard();
+        });
+    </script>
+</body>
+</html>

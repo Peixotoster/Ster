@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STER - Sistema de Gestão</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="home-page">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">⭐ STER</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Recursos</a>
+                <a href="#about">Sobre</a>
+                <a href="/login.html" class="btn btn-outline">Entrar</a>
+                <a href="/register.html" class="btn btn-primary">Começar</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Sistema <span class="highlight">STER</span><br>Gestão inteligente</h1>
+                <p>Gerencie tarefas, hábitos, finanças e muito mais em um só lugar.</p>
+                <div class="hero-buttons">
+                    <a href="/register.html" class="btn btn-primary btn-large">Começar grátis</a>
+                    <a href="#features" class="btn btn-outline btn-large">Ver recursos</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="dashboard-preview">
+                    <div class="preview-header">📊 Dashboard</div>
+                    <div class="preview-content">
+                        <div class="stat-card">✅ Tarefas: 12</div>
+                        <div class="stat-card">🔥 Hábitos: 5</div>
+                        <div class="stat-card">📈 Progresso: 78%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Recursos inteligentes</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Tarefas</h3>
+                    <p>Organize com prioridades, prazos e categorias.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔥</div>
+                    <h3>Hábitos</h3>
+                    <p>Acompanhe sua rotina diária.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Finanças</h3>
+                    <p>Controle despesas e receitas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Métricas</h3>
+                    <p>Visualize seu progresso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => LifeOS.initHome());
+    </script>
+</body>
+</html>
