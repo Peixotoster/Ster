@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - STER</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body class="auth-page">
@@ -24,7 +25,7 @@
                 <div class="form-group">
                     <label for="password">Senha</label>
                     <input type="password" id="password" placeholder="••••••••" required>
-                    <span class="toggle-password" onclick="LifeOS.togglePassword('password')">👁️</span>
+                    <span class="toggle-password" onclick="STER.togglePassword('password')">👁️</span>
                 </div>
 
                 <div class="form-options">
@@ -47,7 +48,7 @@
 
     <script src="/assets/js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => LifeOS.initLogin());
+        document.addEventListener('DOMContentLoaded', () => STER.initLogin());
     </script>
 </body>
 </html>

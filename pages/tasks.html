@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarefas - STER</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body class="dashboard-page">
-    <!-- SIDEBAR (mesma do dashboard) -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
             <span class="logo">⭐ STER</span>
@@ -25,12 +26,15 @@
             <a href="/finances.html">
                 <span>💰</span> Finanças
             </a>
+            <a href="/workout.html">
+                <span>💪</span> Treino
+            </a>
             <a href="/settings.html">
                 <span>⚙️</span> Configurações
             </a>
         </nav>
         <div class="sidebar-footer">
-            <button onclick="LifeOS.logout()" class="btn btn-outline btn-small">🚪 Sair</button>
+            <button onclick="STER.Settings.logout()" class="btn btn-outline btn-small">🚪 Sair</button>
         </div>
     </aside>
 
@@ -42,7 +46,7 @@
                 <p>Gerencie suas tarefas do dia a dia</p>
             </div>
             <div>
-                <button onclick="LifeOS.showAddTask()" class="btn btn-primary">
+                <button onclick="STER.showAddTask()" class="btn btn-primary">
                     ➕ Nova Tarefa
                 </button>
             </div>
@@ -58,18 +62,8 @@
 
         <!-- TASK LIST -->
         <section class="task-list" id="taskList">
-            <div class="task-item">
-                <div class="task-check">
-                    <input type="checkbox">
-                </div>
-                <div class="task-content">
-                    <span class="task-title">Exemplo de tarefa</span>
-                    <span class="task-category">📁 Trabalho</span>
-                </div>
-                <div class="task-actions">
-                    <span class="task-priority high">Alta</span>
-                    <button onclick="LifeOS.deleteTask(1)">🗑️</button>
-                </div>
+            <div style="text-align:center;padding:40px;color:#999;">
+                <p>📋 Carregando tarefas...</p>
             </div>
         </section>
     </main>
@@ -79,7 +73,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Nova Tarefa</h2>
-                <span onclick="LifeOS.closeModal('taskModal')" class="close">&times;</span>
+                <span onclick="STER.closeModal('taskModal')" class="close">&times;</span>
             </div>
             <form id="taskForm">
                 <div class="form-group">
@@ -115,7 +109,7 @@
     <script src="/assets/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            LifeOS.initTasks();
+            STER.autoInit();
         });
     </script>
 </body>
